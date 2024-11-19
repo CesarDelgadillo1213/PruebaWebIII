@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Proyecto.Models.Tarea>
+
+@{
+    ViewData["Title"] = "Tareas";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nueva Tarea</a>
+</p>
+
+<div class="kanban-board">
+    @foreach (var estado in Model.Select(t => t.EstadoTarea.NombreEstado).Distinct())
+    {
+        <div class="kanban-column">
+            <h3>@estado</h3>
+            @foreach (var tarea in Model.Where(t => t.EstadoTarea.NombreEstado == estado))
+            {
+                <div class="kanban-card">
+                    <h4>@Html.DisplayFor(modelItem => tarea.NombreTarea)</h4>
+                    <p>@Html.DisplayFor(modelItem => tarea.Descripcion)</p>
+                    <p>Fecha Creación: @Html.DisplayFor(modelItem => tarea.FechaCreacion)</p>
+                    <p>Fecha Límite: @Html.DisplayFor(modelItem => tarea.FechaLimite)</p>
+                    <p>Proyecto: @Html.DisplayFor(modelItem => tarea.Proyecto.NombreProyecto)</p>
+                    <p>Responsable: @Html.DisplayFor(modelItem => tarea.Usuario.Nombre)</p>
+
+                    <p>
+                        <a asp-action="Edit" asp-route-id="@tarea.TareaId" class="btn btn-sm btn-info">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@tarea.TareaId" class="btn btn-sm btn-secondary">Detalles</a> |
+                        <a asp-action="Delete" asp-route-id="@tarea.TareaId" class="btn btn-sm btn-danger">Eliminar</a>
+                    </p>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .kanban-board {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        margin-top: 20px;
+    }
+
+    .kanban-column {
+        width: 300px;
+        margin: 0 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .kanban-column h3 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .kanban-card {
+        background-color: #ffffff;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+    .kanban-card:hover {
+        background-color: #e2e6ea;
+    }
+
+    .kanban-card h4 {
+        margin: 0;
+        font-size: 16px;
+    }
+
+    .btn {
+        margin: 2px;
+    }
+</style>

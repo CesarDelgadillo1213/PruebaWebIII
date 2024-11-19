@@ -1,0 +1,61 @@
+﻿@model Proyecto.Models.Usuario
+
+@{
+    ViewData["Title"] = "Eliminar Usuario";
+}
+
+<h1 class="text-center">Eliminar Usuario</h1>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h4>¿Estás seguro de que deseas eliminar este usuario?</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Información del Usuario</h5>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Nombre)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Correo)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Correo)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Password)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Password)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Rol)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Rol.NombreRol) 
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer text-center">
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="UsuarioId" />
+                <input type="submit" value="Eliminar" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-secondary ml-2">Volver a la Lista</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

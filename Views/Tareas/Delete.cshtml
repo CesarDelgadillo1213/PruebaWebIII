@@ -1,0 +1,69 @@
+﻿@model Proyecto.Models.Tarea
+
+@{
+    ViewData["Title"] = "Eliminar";
+}
+
+<h1>Eliminar Tarea</h1>
+
+<h3>¿Estás seguro de que deseas eliminar esta tarea?</h3>
+<div class="card">
+    <div class="card-header">
+        <h4>Tarea Detalles</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.NombreTarea)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.NombreTarea)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FechaCreacion)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.FechaCreacion)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.FechaLimite)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.FechaLimite)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.EstadoTarea)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.EstadoTarea.EstadoTareaId)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Proyecto)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Proyecto.ProyectoId)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Usuario)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Usuario.UsuarioId)
+            </dd>
+        </dl>
+
+        <div class="mt-4">
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="TareaId" />
+                <input type="submit" value="Eliminar" class="btn btn-danger" />
+                <a asp-controller="Proyectos" asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+
+            </form>
+        </div>
+    </div>
+</div>

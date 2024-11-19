@@ -1,0 +1,32 @@
+﻿@model Proyecto.Models.Proyectos
+
+@{
+    ViewData["Title"] = "Detalles del Proyecto";
+}
+
+<h2>@Model.NombreProyecto</h2>
+<p><strong>Descripción:</strong> @Model.Descripcion</p>
+<p><strong>Fecha Inicio:</strong> @Model.FechaInicio.ToShortDateString()</p>
+<p><strong>Fecha Fin:</strong> @Model.FechaFin.ToShortDateString()</p>
+
+<h3>Tareas Asignadas:</h3>
+<ul class="list-group">
+    @if (Model.Tareas != null && Model.Tareas.Any())
+    {
+        foreach (var tarea in Model.Tareas)
+        {
+            <li class="list-group-item">
+                <strong>@tarea.NombreTarea</strong> - @tarea.Descripcion
+                <br />
+                <a asp-controller="Tareas" asp-action="Edit" asp-route-id="@tarea.TareaId" class="btn btn-link">Editar</a> |
+                <a asp-controller="Tareas" asp-action="Delete" asp-route-id="@tarea.TareaId" class="btn btn-link text-danger">Eliminar</a>
+            </li>
+        }
+    }
+    else
+    {
+        <li class="list-group-item">No hay tareas asignadas a este proyecto.</li>
+    }
+</ul>
+
+<a asp-controller="Proyectos" asp-action="Index" class="btn btn-primary">Volver a la lista de proyectos</a>

@@ -1,0 +1,141 @@
+﻿@model IEnumerable<Proyecto.Models.Tarea>
+@Html.AntiForgeryToken()
+
+
+@{
+    ViewData["Title"] = "Detalles de Tareas";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="display-4 text-primary">Tareas del Proyecto</h2>
+        </div>
+        <div class="col-auto">
+            <a asp-action="Create" asp-route-proyectoId="@ViewBag.ProyectoId" class="btn btn-success">
+                <i class="bi bi-plus-circle me-2"></i>Añadir Tarea
+            </a>
+        </div>
+    </div>
+
+    <div class="kanban-board d-flex justify-content-between">
+        @foreach (var fase in new[] { "Pendiente", "En Progreso", "Completada", "Cancelada" })
+        {
+            <div class="kanban-column" data-fase="@fase" ondragover="allowDrop(event)" ondrop="drop(event)">
+                <h4>@fase</h4>
+                @foreach (var tarea in Model)
+                {
+                    if (fase == "Fase 1" || tarea.EstadoTarea.NombreEstado == fase)
+                    {
+                        <div class="kanban-card" draggable="true" ondragstart="drag(event)" id="tarea-@tarea.TareaId" data-tarea-id="@tarea.TareaId">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">@tarea.NombreTarea</h5>
+                                    <p class="card-text">@tarea.Descripcion</p>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="bi bi-calendar me-2"></i>Fecha límite: @tarea.FechaLimite.ToShortDateString()
+                                        </small>
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-transparent border-top-0">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-info text-dark">@tarea.EstadoTarea.NombreEstado</span>
+                                        <div>
+                                            <a asp-action="Edit" asp-route-id="@tarea.TareaId" class="btn btn-sm btn-outline-primary me-2">
+                                                <i class="bi bi-pencil me-1"></i>Editar
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@tarea.TareaId" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash me-1"></i>Eliminar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle me-2"></i>No hay tareas asignadas a este proyecto.
+        </div>
+    }
+</div>
+
+
+<style>
+    .kanban-board {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .kanban-column {
+        width: 300px;
+        margin: 0 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .kanban-column h4 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+    .kanban-card {
+        margin-bottom: 15px;
+    }
+
+</style>
+
+<script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var tareaElement = document.getElementById(data);
+        var nuevoEstado = ev.currentTarget.getAttribute('data-fase');
+        var tareaId = tareaElement.getAttribute('data-tarea-id');
+
+        // Mover la tarea al nuevo estado visualmente
+        ev.currentTarget.appendChild(tareaElement);
+
+        // Enviar una solicitud AJAX para actualizar el estado en el backend
+        fetch(`/Tareas/ActualizarEstado/${tareaId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+            },
+            body: JSON.stringify({ nuevoEstado: nuevoEstado })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el estado de la tarea.');
+                }
+                console.log("Tarea movida al estado:", nuevoEstado);
+            })
+            .catch(error => {
+                console.error(error);
+                alert('No se pudo mover la tarea. Intenta nuevamente.');
+            });
+    }
+
+
+</script>
+

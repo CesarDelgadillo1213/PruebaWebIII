@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="login-container">
+    <h2 class="login-title">Iniciar Sesión</h2>
+
+    <form asp-action="Login" method="post" class="login-form">
+        <div class="form-group">
+            <label for="Correo">Correo:</label>
+            <input type="email" id="Correo" name="Correo" required
+                   class="form-input"
+                   placeholder="ejemplo@correo.com" />
+        </div>
+
+        <div class="form-group">
+            <label for="Password">Contraseña:</label>
+            <input type="password" id="Password" name="Password" required
+                   class="form-input"
+                   placeholder="••••••••" />
+        </div>
+
+        <button type="submit" class="login-button">Ingresar</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(ViewData["Error"] as string))
+    {
+        <div class="error-message">
+            @ViewData["Error"]
+        </div>
+    }
+</div>
+
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 1.5rem;
+        font-size: 1.75rem;
+    }
+
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+        .form-group label {
+            color: #555;
+            font-weight: 500;
+        }
+
+    .form-input {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.2s;
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+        }
+
+    .login-button {
+        background-color: #4a90e2;
+        color: white;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+        .login-button:hover {
+            background-color: #357abd;
+        }
+
+    .error-message {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        background-color: #fee2e2;
+        border: 1px solid #fecaca;
+        border-radius: 4px;
+        color: #dc2626;
+        text-align: center;
+    }
+</style>
